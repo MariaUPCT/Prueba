@@ -1,8 +1,10 @@
 package com.example;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -25,9 +27,9 @@ public class ProductBean implements Serializable {
 	public List<Product> getProducts() {
 		if (this.products == null) {
 			this.products = Arrays.asList(
-					new Product(1L, "Silla", 49.99),
-					new Product(2L, "Mesa", 79.99),
-					new Product(3L, "Lampara", 49.99)
+					new Product(1L, "Silla", 49.99, new Date(), LocalDate.now(), LocalDateTime.now()),
+					new Product(2L, "Mesa", 99.99, new Date(), LocalDate.now(), LocalDateTime.now()),
+					new Product(3L, "Lampara", 39.99, new Date(), LocalDate.now(), LocalDateTime.now())
 			);
 		}
 		return this.products;

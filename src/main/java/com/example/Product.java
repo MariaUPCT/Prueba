@@ -1,10 +1,27 @@
 package com.example;
 
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Date;
+
 public class Product {
 	private Long id;
 	private String name;
-	
 	private Double price;
+	private Date registerDate;
+	private LocalDate creationDate;
+	private LocalDateTime creationTime;
+
+	public Product(Long id, String name, Double price, Date registerDate, LocalDate creationDate,
+			LocalDateTime creationTime) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.registerDate = registerDate;
+		this.creationDate = creationDate;
+		this.creationTime = creationTime;
+	}
 
 	public Product() {
 		super();
@@ -39,6 +56,30 @@ public class Product {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public LocalDate getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(LocalDate creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public LocalDateTime getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(LocalDateTime creationTime) {
+		this.creationTime = creationTime;
 	}
 	
 }
