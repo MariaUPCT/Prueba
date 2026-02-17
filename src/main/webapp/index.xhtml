@@ -32,23 +32,31 @@
 		<h:column>
 			<f:facet name="header">ID</f:facet>
 			<h:outputText value="#{p.id}" />
-		</h:column> 
+		</h:column>
 
-		 		<h:column> 
-		 			<f:facet name="header">Name</f:facet> 
-		 			<h:outputText value="#{p.name}" /> 
-		 		</h:column> 
+		<h:column>
+			<f:facet name="header">Name</f:facet>
+			<h:outputText value="#{p.name}" />
+		</h:column>
 
-		 		<h:column> 
-		 			<f:facet name="header">Price</f:facet> 
-		 			<h:outputText value="#{p.price}" /> 
-		 		</h:column> 
+		<h:column>
+			<f:facet name="header">Price</f:facet>
+			<h:outputText value="#{p.price}" />
+		</h:column>
 
-		 		<f:facet name="footer"> 
+		<f:facet name="footer"> 
 		         Hay #{productBean.products.size()} productos. 
-		     </f:facet> 
-	 </h:dataTable> 	
-	
-	
+		</f:facet>
+	</h:dataTable>
+	<h:form>
+		<h:outputLabel	for="email">Email</h:outputLabel>
+		<h:inputText id="email" value="#{userBean.email}"></h:inputText>
+		<br/>
+		<h:outputLabel	for="password">Password</h:outputLabel>
+		<h:inputSecret value="#{userBean.password}"/>
+		<h:commandButton value="Submit" action="user-details"/>
+		
+	</h:form>
+
 </h:body>
 </html>
