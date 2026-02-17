@@ -3,7 +3,7 @@ package com.example;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
-@ManagedBean
+@ManagedBean(name = "userBean")
 @RequestScoped
 public class UserBean {
 
