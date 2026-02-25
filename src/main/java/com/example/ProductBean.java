@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 @ManagedBean(name = "productBean")
@@ -15,7 +16,9 @@ import javax.faces.bean.RequestScoped;
 public class ProductBean implements Serializable {
 
 	private List<Product> products;
-
+	@ManagedProperty(value = "#{productDAO}")
+	private ProductDAO productDAO;
+	
 	public ProductBean() {
 		// lazy init
 	}
@@ -38,4 +41,13 @@ public class ProductBean implements Serializable {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+	
+	public void init() {
+		this.products = this.productDAO.findAll();
+	}
+
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+	
 }

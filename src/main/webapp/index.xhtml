@@ -6,6 +6,9 @@
 <h:head>
 	<title>JSF Hello World</title>
 </h:head>
+<f:metadata>
+<f:viewAction action="#{productBean.init()}"></f:viewAction>
+</f:metadata>
 <h:body>
 	<h1>
 		<h:outputText value="Hola mundo!!!" />

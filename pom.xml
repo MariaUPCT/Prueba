@@ -43,6 +43,12 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Spring Data JPA 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>-->
+
 		<!-- Tomcat externo (WAR) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -70,6 +76,25 @@
 			<artifactId>weld-servlet-core</artifactId>
 			<version>3.1.9.Final</version>
 		</dependency>
+
+		<!-- ############ ORACLE - DRIVER BBDD #################### -->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+		</dependency>
+
+		<!-- JPA Persistence
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+		</dependency> -->
+
+		<!-- Hibernate (JPA provider) 
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.6.15.Final</version>
+		</dependency>-->
 
 	</dependencies>
 

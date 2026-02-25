@@ -1,7 +1,7 @@
 package com.example;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Product {
@@ -32,6 +32,9 @@ public class Product {
 		this.id = id;
 		this.name = name;
 		this.price = price;
+		this.registerDate = new Date();
+		this.creationDate = LocalDate.now(); 
+		this.creationTime = LocalDateTime.now();
 	}
 
 	public Long getId() {
