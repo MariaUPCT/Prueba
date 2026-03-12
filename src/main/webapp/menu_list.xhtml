@@ -1,0 +1,163 @@
+<ui:composition
+        template="/templates/layout/private-layout.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:o="http://omnifaces.org/ui"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:cc="http://java.sun.com/jsf/composite"
+        xmlns:ifw="http://java.sun.com/jsf/composite/component"
+        xmlns:sec="http://www.springframework.org/security/tags">
+        
+	<ui:define name="header"></ui:define>
+	
+	<ui:define name="title">Gestión Menús</ui:define>
+	<ui:define name="description">Gestión de opciones de menú uPortal</ui:define>
+    <ui:define name="semilla">
+    	<li class="active">Gestión Menú</li>
+	</ui:define>		
+    
+	<ui:define name="body">
+    	<h:form class="ui-g">
+ 		  <div class="ui-g-9" align="left">
+            	<p:commandButton action="menu_form.xhtml?faces-redirect=true"
+            					 actionListener="#{adminMenuController.tablaMenu.initSave}"
+            					 icon="fal fa-plus" value="Nuevo" styleClass="btn-primary"
+		            			 rendered="true"/>
+              	<p:spacer width="5"/>
+              	<p:commandButton value="Eliminar Seleccionado" icon="fal fa-trash" styleClass="warning-btn"
+                               action="#{adminMenuController.tablaMenu.remove()}"
+                               disabled="#{empty adminMenuController.tablaMenu.selection or adminMenuController.tablaMenu.isNew()}"
+	                              rendered="true"
+                               process="@this" update="@form">
+                  <p:confirm header="Eliminar elemento" message="Esta seguro de eliminar el elemento seleccionado?" icon="ui-icon-danger"/>
+              	</p:commandButton>
+              	<p:spacer width="5"/>
+              	<!-- <p:commandButton value="Buscar Avanzado" update="@(.ui-dialog)" styleClass="btn-info"
+                               oncomplete="PF('searchDialog').show()" icon="fa fa-search"/> -->
+
+              	<p:spacer width="5"/>
+              	<p:commandButton value="Limpiar Filtros"
+              				 onclick="PF('tMenu').clearFilters()"
+              				 process="@this" update="@form"
+                              action="#{adminMenuController.tablaMenu.clear()}"
+                              icon="fal fa-sync"
+                              styleClass="secondary-button raised-btn"/>
+
+			</div>
+			<div class="ui-g-3" align="right">
+		        <p:button
+					value="Vista de ÁRBOL" icon="fal fa-folder-tree" styleClass="btn-info"
+					outcome="/menu_tree.xhtml"/>
+			</div>
+			
+            <div class="ui-g-12">
+               	<p:dataTable id="dt_tMenu" widgetVar="tMenu" var="c" value="#{adminMenuController.tablaMenu}" rows="15" 
+                              rowKey="#{c.entityId}" lazy="true" sortBy="#{c.vmenu.strJerarquia}" sortOrder="ascending" 
+                              selectionMode="single" selection="#{adminMenuController.tablaMenu.selection}"
+                              paginator="true" paginatorPosition="bottom" 
+                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                              currentPageReportTemplate="(Pag. {currentPage} de {totalPages} - Total Registros: {totalRecords})"  
+                              rowsPerPageTemplate="15,30,50"
+                              tableStyle="width:auto">
+                    
+                    <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                    <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                    <f:facet name="header">
+                    	Opciones de menú
+					</f:facet>
+                         
+                         
+                    <p:column headerText="Jerarquía" sortBy="#{c.vmenu.strJerarquia}" filterBy="#{c.ADVSEARCH_strJerarquia}" priority="1">
+                    		<f:facet name="filter">
+                             <p:inputText value="#{adminMenuController.tablaMenu.filters.ADVSEARCH_strJerarquia}">
+                                 <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/>
+                             </p:inputText>
+                         </f:facet>
+                    		<h:outputText value="#{c.vmenu.strJerarquia}"/>
+                   	</p:column>
+                   	             
+                    <p:column headerText="Cod." sortBy="#{c.codMenu}" filterBy="#{c.codMenu}" priority="1">
+                    		<f:facet name="filter">
+                             <p:inputNumber value="#{adminMenuController.tablaMenu.filters.codMenu}" decimalPlaces="0">
+                                 <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/>
+                             </p:inputNumber>
+                         </f:facet>
+                    		#{c.codMenu}
+                   	</p:column>
+                   	        
+                   	<p:column headerText="Título" sortBy="#{c.titulo}" filterBy="#{c.CONTAINS_titulo}" priority="1">
+                    	<f:facet name="filter">
+                             <p:inputText value="#{adminMenuController.tablaMenu.filters.CONTAINS_titulo}">
+                                 <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/>
+                             </p:inputText>
+                        </f:facet>
+                    	<ui:fragment rendered="#{not empty c.imagen}"> <i class="#{c.imagen}"></i></ui:fragment>
+						<!-- <p:link value=" #{c.titulo}" outcome="menu_form.xhtml"><f:param name="id" value="#{c.entityId}"/></p:link> -->
+						<p:commandLink value=" #{c.titulo}" action="menu_form.xhtml?faces-redirect=true" actionListener="#{adminMenuController.tablaMenu.setSelection(c)}"/>
+                   	</p:column>
+                   	<p:column headerText="Descripción" sortBy="#{c.descripcion}" filterBy="#{c.CONTAINS_descripcion}" priority="6">
+                    	<f:facet name="filter">
+                             <p:inputText value="#{adminMenuController.tablaMenu.filters.CONTAINS_descripcion}">
+                                 <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/>
+                             </p:inputText>
+                        </f:facet>
+                    	#{c.descripcion}
+                   	</p:column>
+<!--                    	<p:column headerText="Imagen" sortBy="#{c.imagen}" filterBy="#{c.CONTAINS_imagen}" priority="6"> -->
+<!--                     		<f:facet name="filter"> -->
+<!--                              <p:inputText value="#{adminMenuController.tablaMenu.filters.CONTAINS_imagen}"> -->
+<!--                                  <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/> -->
+<!--                              </p:inputText> -->
+<!--                          </f:facet> -->
+<!--                     	 <ui:fragment rendered="#{not empty c.imagen}"> <i class="#{c.imagen}"></i></ui:fragment>&#160;#{c.imagen} -->
+<!--                    	</p:column> -->
+                   	<p:column headerText="Acción" sortBy="#{c.accion}" filterBy="#{c.CONTAINS_accion}" priority="6">
+                    	<f:facet name="filter">
+                             <p:inputText value="#{adminMenuController.tablaMenu.filters.CONTAINS_accion}">
+                                 <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/>
+                             </p:inputText>
+                        </f:facet>
+                    	
+                    	<p:outputPanel styleClass="#{(not c.booleanActivo)?'text-secondary':''}">#{c.accion}</p:outputPanel>
+                    	<p:outputPanel rendered="#{not c.booleanActivo}" styleClass="text-danger">(Menú desactivado)</p:outputPanel>
+                   	</p:column>
+                   	<p:column headerText="TipoAcción" sortBy="#{c.accionTipo}" filterBy="#{c.accionTipo}" priority="6">
+                    	<f:facet name="filter">
+			                <p:selectOneMenu onchange="PF('tMenu').filter()" value="#{adminMenuController.tablaMenu.filters.accionTipo}">
+			                    <f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
+			                    <f:selectItem itemLabel="[I] Iframe" itemValue="I" />
+			                    <f:selectItem itemLabel="[F] Acción" itemValue="F" />
+			                    <f:selectItem itemLabel="[E] Externa" itemValue="E" />
+			                    <f:selectItem itemLabel="[S] Separador" itemValue="S" />
+			                </p:selectOneMenu>
+			            </f:facet>
+                    		#{c.accionTipo}
+                   	</p:column>
+                   	<p:column headerText="Orden" sortBy="#{c.orden}" filterBy="#{c.orden}" priority="6" >
+                    	<f:facet name="filter">
+			               <p:inputNumber value="#{adminMenuController.tablaMenu.filters.orden}" decimalPlaces="0">
+			               	  <p:ajax process="@this" update="@none" oncomplete="PF('tMenu').filter()"/>
+			               </p:inputNumber>
+			            </f:facet>
+                    	#{c.orden}
+                   	</p:column>
+<!--                    	<p:column headerText="Módulo" filterBy="#{c.ADVSEARCH_modulo}" priority="6" > -->
+<!--                     	<f:facet name="filter"> -->
+<!--                         	<p:selectOneMenu onchange="PF('tMenu').filter()" value="#{adminMenuController.tablaMenu.filters.ADVSEARCH_modulo}"> -->
+<!-- 	                   			<f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" /> -->
+<!-- 	                  			<f:selectItems value="#{adminMenuController.allModulos}" var="m" itemLabel="#{m.titulo}" itemValue="#{m.codModulo}" /> -->
+<!-- 	                		</p:selectOneMenu> -->
+<!--                          </f:facet> -->
+<!--                     	<ui:repeat value="#{c.uportalModuloMenus.toArray()}" var="m"> -->
+<!--                     		#{m.uportalModulo.titulo} -->
+<!--                     	</ui:repeat> -->
+<!--                    	</p:column> -->
+            </p:dataTable>
+ 			</div>
+       </h:form>
+	</ui:define>
+
+</ui:composition>

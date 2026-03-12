@@ -1,0 +1,45 @@
+<ui:composition
+        template="/templates/layout/ssc-private-layout.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	  	xmlns:pb="http://primefaces.org/babylon">
+	  	
+	<ui:param name="activeProfile" value=""/>
+		  	
+	<ui:define name="titleBrand">[CV#{(not empty activeProfile)?('-' += activeProfile):''}]&#160;</ui:define>
+	
+	<ui:define name="privateTopbar">
+		<ui:include src="/templates/common/private-topbar.xhtml"/>
+		<ui:include src="/templates/common/private-menu.xhtml"/>
+	</ui:define>
+	
+	<ui:define name="monitor">
+	    <!-- Para evitar doble mensaje de extensión de sesión sólo ejecutamos esto cuando no estamos en página embebida -->
+	    <ui:fragment rendered="#{embeddedPage ne true}">
+		    <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+			<p:dialog header="#{msg['error.sessionTimeOut.header']}" widgetVar="sessionTimeOutDialog" 
+				 modal="true" fixedCenter="true" closable="false" width="400" visible="false">
+			  	<div class="ui-g">
+	      			<div class="ui-g-12 ui-sm-12">
+			    		<h:outputText value="#{msg['error.sessionTimeOut.text']}" />
+			     	</div>
+			     	<div class="ui-g-12 ui-sm-12 text-center">
+			     		<p:button id="confirmBackToLogin" value="#{msg['error.sessionTimeOut.button']}"
+			     			onclick="window.location='#{facesContext.externalContext.requestContextPath}/home.xhtml';" ajax="false"/>
+			     	</div>
+			     </div>
+			</p:dialog>
+		</ui:fragment>
+    </ui:define>	
+	
+	<ui:define name="appVersion">
+		[<h:outputText value="#{sscPublicController.appContext}"/>] CV-v<h:outputText value="#{sscPublicController.appVersion}"/> CTSI
+		<span style="display:none">#{sscPublicController.profiles}</span>
+	</ui:define>
+	  	
+</ui:composition>
