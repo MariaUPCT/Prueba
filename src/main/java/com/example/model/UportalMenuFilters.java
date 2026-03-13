@@ -2,7 +2,7 @@ package com.example.model;
 
 import java.io.Serializable;
 
-public class MenuFilters implements Serializable {
+public class UportalMenuFilters implements Serializable {
 
     private String ADVSEARCH_strJerarquia;
     private Integer codMenu;

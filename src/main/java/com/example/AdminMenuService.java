@@ -13,52 +13,52 @@ import javax.faces.bean.ManagedProperty;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-import com.example.model.MenuItem;
-import com.example.model.VMenu;
-import com.example.model.dao.MenuDAO;
+import com.example.model.UportalMenu;
+import com.example.model.VUportalMenu;
+import com.example.model.dao.UportalMenuDAO;
 
 @ManagedBean(name = "adminMenuService")
 @ApplicationScoped
 public class AdminMenuService implements Serializable {
 
-    @ManagedProperty(value = "#{menuDAO}")
-    private MenuDAO menuDAO;
+    @ManagedProperty(value = "#{uportalMenuDAO}")
+    private UportalMenuDAO uportalMenuDAO;
 
-    public List<MenuItem> getAllMenus() {
-        return menuDAO.findAll();
+    public List<UportalMenu> getAllMenus() {
+        return uportalMenuDAO.findAll();
     }
 
     public void deleteMenu(Long entityId) {
-        menuDAO.delete(entityId);
+        uportalMenuDAO.delete(entityId);
     }
 
-    public TreeNode<MenuItem> buildMenuTree() {
-        TreeNode<MenuItem> root = new DefaultTreeNode<>(null, null);
-        Map<String, TreeNode<MenuItem>> nodesByHierarchy = new HashMap<>();
+    public TreeNode<UportalMenu> buildMenuTree() {
+        TreeNode<UportalMenu> root = new DefaultTreeNode<>(null, null);
+        Map<String, TreeNode<UportalMenu>> nodesByHierarchy = new HashMap<>();
 
-        List<MenuItem> items = getAllMenus();
+        List<UportalMenu> items = getAllMenus();
         items.sort(Comparator.comparing(item -> {
-            VMenu vmenu = item.getVmenu();
+            VUportalMenu vmenu = item.getVmenu();
             return vmenu != null && vmenu.getStrJerarquia() != null ? vmenu.getStrJerarquia() : "";
         }));
 
-        for (MenuItem item : items) {
+        for (UportalMenu item : items) {
             String hierarchy = item.getVmenu() != null ? item.getVmenu().getStrJerarquia() : null;
-            TreeNode<MenuItem> parentNode = root;
+            TreeNode<UportalMenu> parentNode = root;
 
             if (hierarchy != null && hierarchy.contains(".")) {
                 String parentHierarchy = hierarchy.substring(0, hierarchy.lastIndexOf('.'));
                 parentNode = nodesByHierarchy.getOrDefault(parentHierarchy, root);
             }
 
-            TreeNode<MenuItem> currentNode = new DefaultTreeNode<>(item, parentNode);
+            TreeNode<UportalMenu> currentNode = new DefaultTreeNode<>(item, parentNode);
             nodesByHierarchy.put(hierarchy, currentNode);
         }
 
         return root;
     }
 
-    public void setMenuDAO(MenuDAO menuDAO) {
-        this.menuDAO = menuDAO;
+    public void setUportalMenuDAO(UportalMenuDAO uportalMenuDAO) {
+        this.uportalMenuDAO = uportalMenuDAO;
     }
 }

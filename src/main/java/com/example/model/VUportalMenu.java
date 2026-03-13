@@ -2,14 +2,14 @@ package com.example.model;
 
 import java.io.Serializable;
 
-public class VMenu implements Serializable {
+public class VUportalMenu implements Serializable {
 
     private String strJerarquia;
 
-    public VMenu() {
+    public VUportalMenu() {
     }
 
-    public VMenu(String strJerarquia) {
+    public VUportalMenu(String strJerarquia) {
         this.strJerarquia = strJerarquia;
     }
 

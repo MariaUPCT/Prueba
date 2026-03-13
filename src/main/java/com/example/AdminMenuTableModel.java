@@ -12,14 +12,14 @@ import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 
-import com.example.model.MenuFilters;
-import com.example.model.MenuItem;
+import com.example.model.UportalMenu;
+import com.example.model.UportalMenuFilters;
 
-public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Serializable {
+public class AdminMenuTableModel extends LazyDataModel<UportalMenu> implements Serializable {
 
     private final AdminMenuService adminMenuService;
-    private MenuFilters filters = new MenuFilters();
-    private MenuItem selection;
+    private UportalMenuFilters filters = new UportalMenuFilters();
+    private UportalMenu selection;
     private boolean newItem;
 
     public AdminMenuTableModel(AdminMenuService adminMenuService) {
@@ -27,8 +27,8 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     @Override
-    public List<MenuItem> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
-        List<MenuItem> filtered = getData(first, pageSize, sortBy, filterBy);
+    public List<UportalMenu> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+        List<UportalMenu> filtered = getData(first, pageSize, sortBy, filterBy);
 
         setRowCount(filtered.size());
 
@@ -46,12 +46,12 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     @Override
-    public String getRowKey(MenuItem item) {
+    public String getRowKey(UportalMenu item) {
         return item != null && item.getEntityId() != null ? String.valueOf(item.getEntityId()) : null;
     }
 
     @Override
-    public MenuItem getRowData(String rowKey) {
+    public UportalMenu getRowData(String rowKey) {
         if (rowKey == null || rowKey.trim().isEmpty()) {
             return null;
         }
@@ -59,7 +59,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
         return findById(rowKey);
     }
 
-    public MenuItem findById(Serializable id) {
+    public UportalMenu findById(Serializable id) {
         if (id == null) {
             return null;
         }
@@ -72,7 +72,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
                 .orElse(null);
     }
 
-    public List<MenuItem> getData(int first, int pageSize, Map<String, SortMeta> sortBy,
+    public List<UportalMenu> getData(int first, int pageSize, Map<String, SortMeta> sortBy,
             Map<String, FilterMeta> filterBy) {
         return getFilteredItems();
     }
@@ -81,8 +81,8 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
         return getFilteredItems().size();
     }
 
-    private List<MenuItem> getFilteredItems() {
-        List<MenuItem> allItems = adminMenuService.getAllMenus();
+    private List<UportalMenu> getFilteredItems() {
+        List<UportalMenu> allItems = adminMenuService.getAllMenus();
 
         return allItems.stream()
                 .filter(this::matchFilters)
@@ -90,7 +90,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
                 .collect(Collectors.toList());
     }
 
-    private boolean matchFilters(MenuItem item) {
+    private boolean matchFilters(UportalMenu item) {
         if (!contains(item.getADVSEARCH_strJerarquia(), filters.getADVSEARCH_strJerarquia())) {
             return false;
         }
@@ -134,7 +134,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     public void initSave() {
-        this.selection = new MenuItem();
+        this.selection = new UportalMenu();
         this.newItem = true;
     }
 
@@ -163,19 +163,19 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
         this.filters = setDefaultFilters();
     }
 
-    public MenuFilters setDefaultFilters() {
-        return new MenuFilters();
+    public UportalMenuFilters setDefaultFilters() {
+        return new UportalMenuFilters();
     }
 
-    public MenuFilters getFilters() {
+    public UportalMenuFilters getFilters() {
         return filters;
     }
 
-    public void setFilters(MenuFilters filters) {
+    public void setFilters(UportalMenuFilters filters) {
         this.filters = filters;
     }
 
-    public MenuItem getSelection() {
+    public UportalMenu getSelection() {
         if (selection == null) {
             initSave();
         }
@@ -183,11 +183,11 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     public Long getId() {
-        MenuItem current = getSelection();
+        UportalMenu current = getSelection();
         return current != null ? current.getEntityId() : null;
     }
 
-    public void setSelection(MenuItem selection) {
+    public void setSelection(UportalMenu selection) {
         this.selection = selection;
         this.newItem = (selection == null);
     }

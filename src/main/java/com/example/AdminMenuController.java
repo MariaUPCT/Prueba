@@ -9,15 +9,15 @@ import javax.faces.bean.RequestScoped;
 
 import org.primefaces.model.TreeNode;
 
-import com.example.model.MenuItem;
+import com.example.model.UportalMenu;
 
 @ManagedBean(name = "adminMenuController")
 @RequestScoped
 public class AdminMenuController implements Serializable {
 
     private AdminMenuTableModel tablaMenu;
-    private TreeNode<MenuItem> treeInfoMenus;
-    private TreeNode<MenuItem> treeInfoMenusSelected;
+    private TreeNode<UportalMenu> treeInfoMenus;
+    private TreeNode<UportalMenu> treeInfoMenusSelected;
 
     @ManagedProperty(value = "#{adminMenuService}")
     private AdminMenuService adminMenuService;
@@ -36,19 +36,19 @@ public class AdminMenuController implements Serializable {
         this.tablaMenu = tablaMenu;
     }
 
-    public TreeNode<MenuItem> getTreeInfoMenus() {
+    public TreeNode<UportalMenu> getTreeInfoMenus() {
         return treeInfoMenus;
     }
 
-    public void setTreeInfoMenus(TreeNode<MenuItem> treeInfoMenus) {
+    public void setTreeInfoMenus(TreeNode<UportalMenu> treeInfoMenus) {
         this.treeInfoMenus = treeInfoMenus;
     }
 
-    public TreeNode<MenuItem> getTreeInfoMenusSelected() {
+    public TreeNode<UportalMenu> getTreeInfoMenusSelected() {
         return treeInfoMenusSelected;
     }
 
-    public void setTreeInfoMenusSelected(TreeNode<MenuItem> treeInfoMenusSelected) {
+    public void setTreeInfoMenusSelected(TreeNode<UportalMenu> treeInfoMenusSelected) {
         this.treeInfoMenusSelected = treeInfoMenusSelected;
     }
 

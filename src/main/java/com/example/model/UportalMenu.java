@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class MenuItem implements Serializable {
+public class UportalMenu implements Serializable {
 
     private Long entityId;
     private Integer codMenu;
@@ -24,16 +24,16 @@ public class MenuItem implements Serializable {
     private Integer codPadre;
     private Integer orden;
     private boolean booleanActivo;
-    private VMenu vmenu;
+    private VUportalMenu vmenu;
 
-    public MenuItem() {
+    public UportalMenu() {
         this.renderSemilla = "S";
         this.openInNewTab = "N";
         this.sendLangParameter = "N";
-        this.vmenu = new VMenu();
+        this.vmenu = new VUportalMenu();
     }
 
-    public MenuItem(Long entityId, Integer codMenu, String titulo, String descripcion, String imagen, String accion,
+    public UportalMenu(Long entityId, Integer codMenu, String titulo, String descripcion, String imagen, String accion,
             String accionTipo, Integer orden, boolean booleanActivo, String strJerarquia) {
         this.entityId = entityId;
         this.codMenu = codMenu;
@@ -44,7 +44,7 @@ public class MenuItem implements Serializable {
         this.accionTipo = accionTipo;
         this.orden = orden;
         this.booleanActivo = booleanActivo;
-        this.vmenu = new VMenu(strJerarquia);
+        this.vmenu = new VUportalMenu(strJerarquia);
     }
 
     public Long getEntityId() {
@@ -191,11 +191,11 @@ public class MenuItem implements Serializable {
         this.booleanActivo = booleanActivo;
     }
 
-    public VMenu getVmenu() {
+    public VUportalMenu getVmenu() {
         return vmenu;
     }
 
-    public void setVmenu(VMenu vmenu) {
+    public void setVmenu(VUportalMenu vmenu) {
         this.vmenu = vmenu;
     }
 
