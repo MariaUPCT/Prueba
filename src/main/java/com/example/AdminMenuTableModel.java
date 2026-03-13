@@ -25,7 +25,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
 
     @Override
     public List<MenuItem> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
-        List<MenuItem> filtered = getFilteredItems();
+        List<MenuItem> filtered = getData(first, pageSize, sortBy, filterBy);
 
         setRowCount(filtered.size());
 
@@ -39,7 +39,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
 
     @Override
     public int count(Map<String, FilterMeta> filterBy) {
-        return getFilteredItems().size();
+        return getDataCount(filterBy);
     }
 
     @Override
@@ -53,11 +53,29 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
             return null;
         }
 
+        return findById(rowKey);
+    }
+
+    public MenuItem findById(Serializable id) {
+        if (id == null) {
+            return null;
+        }
+
+        String rowKey = String.valueOf(id);
         return adminMenuService.getAllMenus().stream()
                 .filter(item -> item.getEntityId() != null)
                 .filter(item -> rowKey.equals(String.valueOf(item.getEntityId())))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<MenuItem> getData(int first, int pageSize, Map<String, SortMeta> sortBy,
+            Map<String, FilterMeta> filterBy) {
+        return getFilteredItems();
+    }
+
+    public int getDataCount(Map<String, FilterMeta> filterBy) {
+        return getFilteredItems().size();
     }
 
     private List<MenuItem> getFilteredItems() {
@@ -123,11 +141,15 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
     
     public String remove() {
+        doRemove();
+        return null;
+    }
+
+    public void doRemove() {
         if (selection != null && !isNew()) {
             adminMenuService.deleteMenu(selection.getEntityId());
             selection = null;
         }
-        return null;
     }
 
     public boolean isNew() {
@@ -135,7 +157,11 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     public void clear() {
-        this.filters = new MenuFilters();
+        this.filters = setDefaultFilters();
+    }
+
+    public MenuFilters setDefaultFilters() {
+        return new MenuFilters();
     }
 
     public MenuFilters getFilters() {
