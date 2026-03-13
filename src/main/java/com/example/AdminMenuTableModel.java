@@ -117,6 +117,11 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
         this.newItem = true;
     }
 
+    public String initSaveAndGoForm() {
+        initSave();
+        return "menu_form.xhtml?faces-redirect=true";
+    }
+    
     public String remove() {
         if (selection != null && !isNew()) {
             adminMenuService.deleteMenu(selection.getEntityId());

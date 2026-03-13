@@ -1,0 +1,379 @@
+<ui:composition
+        template="/templates/layout/private-layout.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:o="http://omnifaces.org/ui"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+		xmlns:cc="http://java.sun.com/jsf/composite"
+		xmlns:ifw="http://java.sun.com/jsf/composite/component">
+    
+    <ui:define name="metadata">
+<!--     	<f:metadata> -->
+<!--             <f:viewParam name="id" value="#{adminMenuController.tablaMenu.id}" converter="javax.faces.BigDecimal"/> -->
+<!--             <f:viewAction action="#{adminMenuController.tablaMenu.init}"/> -->
+<!--         </f:metadata> -->
+    </ui:define>
+    
+	<ui:define name="header">
+		<!-- Definición de variables -->
+		<c:set var="menu" value="#{adminMenuController.tablaMenu.selection}"/>
+		<c:set var="isNew" value="#{adminMenuController.tablaMenu.isNew()}"/>
+		<c:set var="isAdminUportal" value="#{true}"/>
+	</ui:define>
+	
+	<ui:define name="title">Gestión Menús</ui:define>
+	<ui:define name="description">Gestión de opciones de menú - uPortal</ui:define>
+    <ui:define name="semilla">
+    	<li>
+    		<p:commandLink action="menu_list?faces-redirect=true" immediate="true">Gestión Menú</p:commandLink>
+    	</li>
+    	<li class="active">
+			<ui:fragment rendered="#{isNew}">Nuevo</ui:fragment>
+			<ui:fragment rendered="#{!isNew}">Editar <h:outputText value="#{adminMenuController.tablaMenu.id}"/></ui:fragment>
+		</li>
+	</ui:define>		
+						    
+	<ui:define name="body">
+		<h:form>
+			
+			<div class="ui-g">
+				<div class="ui-g-12">
+                	<p:splitButton   action="#{adminMenuController.tablaMenu.save}" update="@form tgruposForm"
+                                     value="#{msg['save']}" icon="fal fa-check" styleClass="success-btn"
+                                     rendered="#{isAdminUportal}" process="@form">
+                 			<p:menuitem value="#{msg['saveAndReturn']}" icon="fal fa-backward" action="#{adminMenuController.tablaMenu.save(true)}" />
+                 	</p:splitButton>  
+                 	<p:spacer width="5" rendered="#{isNew}"/>
+                    <p:commandButton value="#{msg['clear']}" action="#{adminMenuController.tablaMenu.clear}" process="@this"
+                                       icon="fal fa-refresh" styleClass="primary-button"
+                                       update="@form" rendered="#{isNew}" resetValues="true"/>
+                    <p:spacer width="5" rendered="#{not isNew and isAdminUportal}"/>
+				
+					<p:commandButton value="#{msg['delete']}" action="#{adminMenuController.tablaMenu.remove}" process="@this"
+                                       rendered="#{not isNew and isAdminUportal}" icon="fa fa-trash"
+                                       styleClass="warning-btn">
+                      	<p:confirm header="#{msg['confirmation']}" message="#{msg['deleteConfirmation']}" icon="ui-icon-danger"/>
+                    </p:commandButton>
+                   
+                    <p:spacer width="5"/>
+                    <p:commandButton value="#{msg['back']}" immediate="true"
+                                       action="menu_list?faces-redirect=true"
+                                       process="@this"
+                                       icon="fal fa-reply"
+                                       styleClass="secondary-button raised-btn"/>     
+            	</div>
+            </div>
+                   	
+                   		
+			<div class="ui-g">
+				<div class="ui-g-12"><p:separator/></div>
+			</div>
+                	
+            <div class="ui-g ui-fluid">
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Título" for="titulo"/>
+                 </div>
+                 <div class="ui-g-3 ui-sm-12" >
+                     <p:inputText id="titulo" 
+                     			value="#{menu.titulo}"
+                     			disabled="#{!isAdminUportal}"/>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Descripción" for="descripcion"/>
+                 </div>
+                 <div class="ui-g-7 ui-sm-12" >
+                     <p:inputText id="descripcion" 
+                     			value="#{menu.descripcion}"
+                     			disabled="#{!isAdminUportal}"/>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Title" for="tituloIngles"/>
+                 </div>
+                 <div class="ui-g-3 ui-sm-12" >
+                     <p:inputText id="tituloIngles" 
+                     			value="#{menu.tituloIngles}"
+                     			disabled="#{!isAdminUportal}"/>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Description" for="descripcionIngles"/>
+                 </div>
+                 <div class="ui-g-7 ui-sm-12" >
+                     <p:inputText id="descripcionIngles" 
+                     			value="#{menu.descripcionIngles}"
+                     			disabled="#{!isAdminUportal}"/>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Tipo Acción" for="tipoAccion"/>
+                 </div>
+                 <div class="ui-g-3 ui-sm-12" >
+                     <p:selectOneMenu id="tipoAccion" required="true" 
+                     				value="#{menu.accionTipo}"
+                     				disabled="#{!isAdminUportal}">
+			         	<p:ajax event="change" update="@(.accionTipoRef)" />
+			         	<f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
+			             <f:selectItem itemLabel="[I] Iframe" itemValue="I" />
+			             <f:selectItem itemLabel="[F] Acción" itemValue="F" />
+			             <f:selectItem itemLabel="[E] Externa" itemValue="E" />
+			             <f:selectItem itemLabel="[S] Separador" itemValue="S" />
+			         </p:selectOneMenu>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Acción" for="accion"/>
+                 </div>
+                 <div class="ui-g-7 ui-sm-12" >
+                     <div class="ui-g">
+	                     <div class="ui-g-12">
+                     		<div class="ui-inputgroup">
+                                <p:inputText id="accion" value="#{menu.accion}"	disabled="#{!isAdminUportal}"/>
+                                <p:commandButton title="Establecer página de servicio no disponible (reemplaza la acción por la de servicio desactivado)" icon="fal fa-thumbs-down"
+	                				action="#{adminMenuController.setMenuActionUnavailable()}" update="accion" 
+	                				styleClass="danger-btn" disabled="#{!isAdminUportal}"/>
+                           	</div>
+	                     </div>
+	                     <div class="ui-g-12">
+	                     	 <div class="ui-g-2 ui-sm-12">
+			                     <p:outputLabel value="Semilla" for="renderSemilla" styleClass="accionTipoRef renderSemillaRef"/>
+			                 </div>
+			                 <div class="ui-g-4 ui-sm-12" >
+			                     <p:selectOneMenu id="renderSemilla" required="#{menu.accionTipo eq 'I'}"
+			                     				 value="#{menu.renderSemilla}"
+			                     				 disabled="#{!isAdminUportal or menu.accionTipo ne 'I' or menu.openInNewTab eq 'S'}" styleClass="accionTipoRef renderSemillaRef">
+						             <f:selectItem itemLabel="Sí" itemValue="S" />
+						             <f:selectItem itemLabel="No" itemValue="N" />
+						         </p:selectOneMenu>
+						         <p:outputLabel styleClass="text-secondary">
+				                 	 Mostrar semilla automática
+				                 </p:outputLabel>
+			                 </div>
+			                 <div class="ui-g-2 ui-sm-12">
+			                     <p:outputLabel value="Nueva pestaña" for="openInNewTab" styleClass="accionTipoRef"/>
+			                 </div>
+			                 <div class="ui-g-4 ui-sm-12" >
+			                     <p:selectOneMenu id="openInNewTab" required="#{menu.accionTipo eq 'I'}"
+			                     				 value="#{menu.openInNewTab}"
+			                     				 disabled="#{!isAdminUportal or menu.accionTipo ne 'I'}" styleClass="accionTipoRef">
+						             <p:ajax event="change" update="@(.renderSemillaRef)"/>
+						             <f:selectItem itemLabel="No" itemValue="N" />
+						             <f:selectItem itemLabel="Sí" itemValue="S" />
+						         </p:selectOneMenu>
+						         <p:outputLabel styleClass="text-secondary">
+				                 	 Aplicación en nueva pestaña
+				                 </p:outputLabel>
+			                 </div>
+	                     </div>
+                     </div>
+                 </div>
+                                  
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Permiso" for="permiso"/>
+                 </div>
+                 <div class="ui-g-3 ui-sm-12" >
+                     <p:inputText id="permiso" 
+                     			value="#{menu.codPermiso}"
+                     			disabled="#{!isAdminUportal}"/>
+                     <p:outputLabel styleClass="text-secondary">
+	                 	 Permiso utilizado sobre todo para la autorización en controladores
+	                 </p:outputLabel>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+			    	<p:outputLabel value="Enviar idioma" for="sendLangParameter" styleClass="accionTipoRef"/>
+				 </div>
+				 <div class="ui-g-2 ui-sm-12" >
+			    	<p:selectOneMenu id="sendLangParameter"
+			                   				 value="#{menu.sendLangParameter}"
+			                   				 disabled="#{!isAdminUportal or menu.accionTipo eq 'S'}" styleClass="accionTipoRef">
+						<f:selectItem itemLabel="Sí" itemValue="S" />
+						<f:selectItem itemLabel="No" itemValue="N" />
+					</p:selectOneMenu>
+					<p:outputLabel styleClass="text-secondary">
+				    	Envíar parámetro de idioma (lang)
+				    </p:outputLabel>	
+				 </div>
+                 <div class="ui-g-5"/>
+                 
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Imagen" for="imagen"/>
+                 </div>
+                 <div class="ui-g-2 ui-sm-12" >
+                     <p:inputText id="imagen" 
+                     			value="#{menu.imagen}"
+                     			disabled="#{!isAdminUportal}">
+                     	 <p:ajax event="keyup" update="imgPreview"/>
+                     </p:inputText>
+                     <h:panelGrid id="imgPreview"><i class="#{menu.imagen}"></i></h:panelGrid>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Imagen Externa" for="imagenExterna"/>
+                 </div>
+                 <div class="ui-g-8 ui-sm-12" >
+                     <p:inputText id="imagenExterna" 
+                     			value="#{menu.imagenExterna}"
+                     			disabled="#{!isAdminUportal}"/>
+                 </div>
+                 
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Módulo" for="codModulo"/>
+                 </div>
+                 <div class="ui-g-3 ui-sm-12" >
+                    <p:selectOneMenu id="codModulo" required="true"
+                    				value="#{menu.codModulo}"
+                    				disabled="#{!isAdminUportal}">
+				     	<f:selectItem itemLabel="Seleccione módulo" itemValue="#{menu.codModulo}" />
+				 	</p:selectOneMenu>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Padre" for="codPadre"/>
+                 </div>
+                 <div class="ui-g-3 ui-sm-12" >
+                    <p:selectOneMenu id="codPadre" style="min-width: auto;"
+                    				value="#{menu.codPadre}" filter="true" filterMatchMode="contains"
+                    				disabled="#{!isAdminUportal}">
+         				<f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
+         			</p:selectOneMenu>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Orden" for="orden"/>
+                 </div>
+                 <div class="ui-g-1 ui-sm-12" >
+                    <p:inputNumber id="orden" required="true"
+									value="#{menu.orden}"  
+									disabled="#{!isAdminUportal}"
+									decimalPlaces="0"/>
+					<p:slider for="orden" minValue="0" maxValue="99"/>
+			      </div>
+			      <div class="ui-g-1 ui-sm-12">
+			      	<p:outputLabel value="Activo" for="activo"/>
+			      </div>
+			      <div class="ui-g-1 ui-sm-12" >
+			      	<p:selectOneMenu id="activo" required="true"
+			      					value="#{menu.activo}"
+			      					disabled="#{!isAdminUportal}">
+			             <f:selectItem itemLabel="Sí" itemValue="S" />
+			             <f:selectItem itemLabel="No" itemValue="N" />
+			         </p:selectOneMenu>
+                 </div>
+       		</div>
+        </h:form>
+		<h:form id="taplForm" rendered="false">
+      		<div class="ui-g ui-fluid">
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Aplicaciones" for="tapls" styleClass="accionTipoRef"/>
+                 </div>
+                 <div class="ui-g-11 ui-sm-12">
+					<p:outputPanel  id="tapls" styleClass="accionTipoRef" >
+                     	<p:dataTable var="p" value="#{adminMenuController.getAplicacionesByCodMenu(menu.codMenu)}" 
+                     			paginator="false" rendered="#{menu.accionTipo != 'S'}">
+                     	 	<p:column headerText="Código">
+        						<h:outputText value="#{p.codigo}" />
+    						</p:column>
+    						<p:column headerText="Descripción">
+        						<h:outputText value="#{p.descripcion}"/>
+    						</p:column>
+    						<p:column width="100" headerText="Estado">
+        						<h:outputText value="Activada" rendered="#{p.booleanActivo}" styleClass="text-success"/>
+        						<h:outputText value="Desactivada" rendered="#{not p.booleanActivo}" styleClass="text-danger"/>
+    						</p:column>
+    						<p:column width="50" styleClass="text-center">
+    							<p:commandButton icon="fal fa-external-link" styleClass="btn-primary" title="Ver Aplicación"
+    								action="/modules/admin/apl/apl_form.xhtml?faces-redirect=true" actionListener="#{adminController.tablaAplicaciones.init(p.codigo)}" />
+    						</p:column>
+                     	</p:dataTable>
+                    	<h:outputText value="Los separadores no pueden tener asignadas aplicaciones" rendered="#{menu.accionTipo == 'S'}" styleClass="font-weight-bold"/>
+                    </p:outputPanel>
+                 </div>
+            </div>
+         </h:form>
+		<h:form id="tgruposForm" rendered="false">
+      		<div class="ui-g ui-fluid">
+                 <div class="ui-g-1 ui-sm-12">
+                     <p:outputLabel value="Grupos" for="tgrupos" styleClass="accionTipoRef"/>
+                 </div>
+                 <div class="ui-g-11 ui-sm-12">
+					<p:outputPanel  id="tgrupos" styleClass="accionTipoRef" >
+                     	<p:dataTable var="p" value="#{menu.uportalMenuGrupos}" 
+                     			paginator="false" rendered="#{menu.accionTipo != 'S'}">
+                     	 	<p:column headerText="Grupo">
+        						<h:outputText value="#{p.ugrupo.vgrupo.ramaAndNombre}" />
+    						</p:column>
+    						<p:column width="50">
+    							<f:facet name="header">
+    								<p:commandButton update="@(.ui-dialog)" icon="fa fa-plus" styleClass="btn-primary" 
+    							 		disabled="#{isNew}"
+    							 		rendered="#{isAdminUportal}"
+    							 		action="#{adminMenuController.initAddMenuGrupo()}" oncomplete="PF('addGruposDialog').show()" />
+    							</f:facet>
+    							<p:commandButton  icon="fa fa-trash" styleClass="warning-btn"
+    						  		process="@this" update="@form" 
+    						  		action="#{adminMenuController.deleteMenuGrupos(p)}"
+    						  		rendered="#{isAdminUportal}">
+                     	 				<p:confirm header="Confirmación" message="Está seguro de eliminar el acceso para este grupo?" icon="ui-icon-danger"/>
+                    			</p:commandButton>
+    						</p:column>
+                     	</p:dataTable>
+                    	<h:outputText value="Los separadores no pueden tener asignados grupos" rendered="#{menu.accionTipo == 'S'}" styleClass="font-weight-bold"/>
+                    </p:outputPanel>
+                 </div>
+            </div>
+         </h:form>				
+	    	
+	    	
+	    	
+	     <p:dialog header="Añadir Grupo" widgetVar="addGruposDialog" modal="true" appendTo="@(body)" rendered="false"
+                  responsive="true" draggable="true" styleClass="box-success">
+
+            <h:form>
+                <p:commandButton  value="Guardar" styleClass="btn-primary" icon="fa fa-check" 
+                				  action="#{adminMenuController.addMenuGrupos()}"
+                				  update="@(form)" oncomplete="PF('addGruposDialog').hide()"/>
+                <p:spacer height="5"/>
+                <p:commandButton value="Cerrar" icon="fa fa-close" oncomplete="PF('addGruposDialog').hide()"/>
+                <p:separator/>
+
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <p:outputLabel for="grupo" value="Grupo:"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:selectOneMenu id="grupo" value="#{adminMenuController.tmpMenuGrupos.id.codGrupo}"
+                        		 filter="true" filterMatchMode="contains" dynamic="true">
+				        	<f:selectItem itemLabel="Seleccione grupo" itemValue="#{null}" noSelectionOption="true" />
+				            <f:selectItems 	value="#{groupsController.allVgrupos}" 
+											var="g" 
+											itemLabel="#{g.ramaAndNombre}" 
+											itemValue="#{g.codigo}"/>
+				        </p:selectOneMenu>
+                    </div>
+	                <div class="ui-g-2">
+                        <p:outputLabel for="mascara" value="Máscara:"/>
+                    </div>
+                    <div class="ui-g-2">
+                    	<p:inputText id="mascara" value="#{adminMenuController.tmpMenuGrupos.mascara}"/>
+                    </div>
+                    <div class="ui-g-2">
+                        <p:outputLabel for="audCorrecto" value="Aud Correcto:"/>
+                    </div>
+                    <div class="ui-g-2">
+                    	<p:selectOneMenu id="audCorrecto" value="#{adminMenuController.tmpMenuGrupos.audCorrecto}" required="true">
+			                <f:selectItem itemLabel="No" itemValue="N" />
+			                <f:selectItem itemLabel="Sí" itemValue="S" />
+			            </p:selectOneMenu>
+			       	</div>
+			       	<div class="ui-g-2">
+                        <p:outputLabel for="audIncorrecto" value="Aud Incorrecto:"/>
+                    </div>
+                    <div class="ui-g-2">
+                    	<p:selectOneMenu id="audIncorrecto" value="#{adminMenuController.tmpMenuGrupos.audIncorrecto}" required="true">
+			                <f:selectItem itemLabel="Sí" itemValue="S" />
+			                <f:selectItem itemLabel="No" itemValue="N" />
+			            </p:selectOneMenu>
+			       	</div>
+                </div>
+            </h:form>
+        </p:dialog>
+	        
+	</ui:define>
+
+</ui:composition>
