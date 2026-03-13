@@ -14,13 +14,13 @@ import org.primefaces.model.SortMeta;
 
 public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Serializable {
 
-    private final MenuDAO menuDAO;
+    private final AdminMenuService adminMenuService;
     private MenuFilters filters = new MenuFilters();
     private MenuItem selection;
     private boolean newItem;
 
-    public AdminMenuTableModel(MenuDAO menuDAO) {
-        this.menuDAO = menuDAO;
+    public AdminMenuTableModel(AdminMenuService adminMenuService) {
+        this.adminMenuService = adminMenuService;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
             return null;
         }
 
-        return menuDAO.findAll().stream()
+        return adminMenuService.getAllMenus().stream()
                 .filter(item -> item.getEntityId() != null)
                 .filter(item -> rowKey.equals(String.valueOf(item.getEntityId())))
                 .findFirst()
@@ -61,7 +61,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     private List<MenuItem> getFilteredItems() {
-        List<MenuItem> allItems = menuDAO.findAll();
+        List<MenuItem> allItems = adminMenuService.getAllMenus();
 
         return allItems.stream()
                 .filter(this::matchFilters)
@@ -119,7 +119,7 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
 
     public String remove() {
         if (selection != null && !isNew()) {
-            menuDAO.delete(selection.getEntityId());
+            adminMenuService.deleteMenu(selection.getEntityId());
             selection = null;
         }
         return null;
