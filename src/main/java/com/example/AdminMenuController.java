@@ -9,6 +9,8 @@ import javax.faces.bean.RequestScoped;
 
 import org.primefaces.model.TreeNode;
 
+import com.example.model.MenuItem;
+
 @ManagedBean(name = "adminMenuController")
 @RequestScoped
 public class AdminMenuController implements Serializable {

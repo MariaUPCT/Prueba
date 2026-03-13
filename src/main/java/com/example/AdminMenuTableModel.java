@@ -12,6 +12,9 @@ import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 
+import com.example.model.MenuFilters;
+import com.example.model.MenuItem;
+
 public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Serializable {
 
     private final AdminMenuService adminMenuService;
@@ -173,11 +176,19 @@ public class AdminMenuTableModel extends LazyDataModel<MenuItem> implements Seri
     }
 
     public MenuItem getSelection() {
+        if (selection == null) {
+            initSave();
+        }
         return selection;
+    }
+
+    public Long getId() {
+        MenuItem current = getSelection();
+        return current != null ? current.getEntityId() : null;
     }
 
     public void setSelection(MenuItem selection) {
         this.selection = selection;
-        this.newItem = false;
+        this.newItem = (selection == null);
     }
 }

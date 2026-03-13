@@ -13,6 +13,10 @@ import javax.faces.bean.ManagedProperty;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import com.example.model.MenuItem;
+import com.example.model.VMenu;
+import com.example.model.dao.MenuDAO;
+
 @ManagedBean(name = "adminMenuService")
 @ApplicationScoped
 public class AdminMenuService implements Serializable {

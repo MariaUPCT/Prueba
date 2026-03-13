@@ -1,4 +1,4 @@
-package com.example;
+package com.example.model.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+
+import com.example.model.MenuItem;
 
 @ManagedBean(name = "menuDAO")
 @ApplicationScoped
